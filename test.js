@@ -11,7 +11,8 @@ import { expect } from "chai";
 let browser,page ;
 
 describe("Initial Setup" ,async function ()  {
-    before(async () => {browser = await chromium.launch({});})
+    this.timeout(60000);
+    before(async () => {browser = await chromium.launch({headless:false, slowMo:1000});})
     after( async () => {await browser.close();})
     beforeEach( async () => {page = await browser.newPage();})
     afterEach( async () => {await page.close();})
@@ -31,6 +32,12 @@ describe("Initial Setup" ,async function ()  {
         const content = await page.textContent("h1");
         // expect(content).to.equal("test");
         console.log(content);
+    })
+    it("should click button and add new text", async () => {
+        await page.goto("http://localhost:5500/index.html");
+        await page.click("button");
+        const content = await page.textContent("h1");
+        expect(content).to.contain("clicked");
     })
 })
 
